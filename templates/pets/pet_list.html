@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+
+{% block title %}
+Find Pets - PetCare
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>Find Your Perfect Pet</h2>
+
+            <p>
+                Search and filter pets based on your preferences.
+            </p>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="filter-box">
+
+            <form method="GET"
+                  class="filter-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by pet name"
+                    value="{{ search }}"
+                >
+
+
+                <select name="animal_type">
+
+                    <option value="">
+                        All Animal Types
+                    </option>
+
+                    <option value="Dog"
+                        {% if animal_type == "Dog" %}selected{% endif %}>
+                        Dog
+                    </option>
+
+                    <option value="Cat"
+                        {% if animal_type == "Cat" %}selected{% endif %}>
+                        Cat
+                    </option>
+
+                    <option value="Bird"
+                        {% if animal_type == "Bird" %}selected{% endif %}>
+                        Bird
+                    </option>
+
+                    <option value="Rabbit"
+                        {% if animal_type == "Rabbit" %}selected{% endif %}>
+                        Rabbit
+                    </option>
+
+                    <option value="Other"
+                        {% if animal_type == "Other" %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    name="breed"
+                    placeholder="Breed"
+                    value="{{ breed }}"
+                >
+
+
+                <select name="gender">
+
+                    <option value="">
+                        All Genders
+                    </option>
+
+                    <option value="Male"
+                        {% if gender == "Male" %}selected{% endif %}>
+                        Male
+                    </option>
+
+                    <option value="Female"
+                        {% if gender == "Female" %}selected{% endif %}>
+                        Female
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Location"
+                    value="{{ location }}"
+                >
+
+
+                <select name="status">
+
+                    <option value="">
+                        All Status
+                    </option>
+
+                    <option value="Available"
+                        {% if status == "Available" %}selected{% endif %}>
+                        Available
+                    </option>
+
+                    <option value="Adopted"
+                        {% if status == "Adopted" %}selected{% endif %}>
+                        Adopted
+                    </option>
+
+                </select>
+
+
+                <div class="filter-buttons">
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Search
+                    </button>
+
+                    <a
+                        href="{% url 'pet_list' %}"
+                        class="secondary-button"
+                    >
+                        Reset
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- PETS -->
+
+        {% if pets %}
+
+            <div class="pet-grid">
+
+                {% for pet in pets %}
+
+                    <div class="pet-card">
+
+                        {% if pet.image %}
+
+                            <img
+                                src="{{ pet.image.url }}"
+                                alt="{{ pet.name }}"
+                                class="pet-card-image"
+                            >
+
+                        {% else %}
+
+                            <div
+                                class="pet-card-image"
+                                style="
+                                    background:#eee;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    font-size:60px;
+                                "
+                            >
+                                🐾
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="pet-card-content">
+
+                            <h3>
+                                {{ pet.name }}
+                            </h3>
+
+                            <p>
+                                {{ pet.animal_type }}
+                                •
+                                {{ pet.breed }}
+                            </p>
+
+                            <p>
+                                Age: {{ pet.age }}
+                            </p>
+
+                            <p>
+                                Gender: {{ pet.gender }}
+                            </p>
+
+                            <p>
+                                📍 {{ pet.location }}
+                            </p>
+
+
+                            <div class="pet-card-footer">
+
+                                {% if pet.status == "Available" %}
+
+                                    <span class="status-badge status-available">
+                                        Available
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge status-adopted">
+                                        Adopted
+                                    </span>
+
+                                {% endif %}
+
+
+                                <a
+                                    href="{% url 'pet_detail' pet.id %}"
+                                    class="primary-button"
+                                >
+                                    Details
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>
+                    No pets found.
+                </h3>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+                <a
+                    href="{% url 'pet_list' %}"
+                    class="secondary-button"
+                >
+                    Clear Filters
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

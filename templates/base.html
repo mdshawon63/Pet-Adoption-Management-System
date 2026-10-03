@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}PetCare - Pet Adoption & Rescue{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="container navbar-content">
+
+        <a href="{% url 'home' %}" class="logo">
+            🐾 PetCare
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button class="menu-toggle"
+                id="menuToggle"
+                type="button">
+            ☰
+        </button>
+
+        <div class="nav-links" id="navLinks">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'pet_list' %}">
+                Find Pets
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'adoption_dashboard' %}">
+                    My Requests
+                </a>
+
+                <a href="{% url 'profile' %}">
+                    Profile
+                </a>
+
+                <a href="{% url 'logout' %}">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}"
+                   class="nav-button">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MESSAGES ================= -->
+
+{% if messages %}
+
+<div class="container messages">
+
+    {% for message in messages %}
+
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<main>
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+            <h3>🐾 PetCare</h3>
+
+            <p>
+                Helping pets find loving homes.
+            </p>
+        </div>
+
+        <div>
+            <h4>Quick Links</h4>
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'pet_list' %}">
+                Find Pets
+            </a>
+        </div>
+
+        <div>
+            <h4>Contact</h4>
+
+            <p>Email: support@petcare.com</p>
+
+            <p>Phone: +880 1XXXXXXXXX</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 PetCare — Pet Adoption & Rescue Platform
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

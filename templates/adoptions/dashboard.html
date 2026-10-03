@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}My Adoption Requests{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <h1>My Adoption Requests</h1>
+
+            <p>
+                Track all your pet adoption requests here.
+            </p>
+
+        </div>
+
+
+        {% if adoption_requests %}
+
+            <div class="requests-list">
+
+                {% for adoption in adoption_requests %}
+
+                    <div class="request-card">
+
+                        <div class="request-pet">
+
+                            {% if adoption.pet.image %}
+
+                                <img
+                                    src="{{ adoption.pet.image.url }}"
+                                    alt="{{ adoption.pet.name }}"
+                                >
+
+                            {% endif %}
+
+                            <div>
+
+                                <h2>
+                                    {{ adoption.pet.name }}
+                                </h2>
+
+                                <p>
+                                    {{ adoption.pet.animal_type }}
+                                    •
+                                    {{ adoption.pet.breed }}
+                                </p>
+
+                                <p>
+                                    📍 {{ adoption.pet.location }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="request-info">
+
+                            <p>
+                                <strong>Phone:</strong>
+                                {{ adoption.phone }}
+                            </p>
+
+                            <p>
+                                <strong>Submitted:</strong>
+                                {{ adoption.created_at|date:"d M Y, h:i A" }}
+                            </p>
+
+
+                            <div class="request-status">
+
+                                <strong>Status:</strong>
+
+                                {% if adoption.status == "Pending" %}
+
+                                    <span class="status-badge status-pending">
+                                        Pending
+                                    </span>
+
+                                {% elif adoption.status == "Approved" %}
+
+                                    <span class="status-badge status-approved">
+                                        Approved
+                                    </span>
+
+                                {% elif adoption.status == "Rejected" %}
+
+                                    <span class="status-badge status-rejected">
+                                        Rejected
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="request-actions">
+
+                            <a
+                                href="{% url 'pet_detail' adoption.pet.id %}"
+                                class="secondary-button"
+                            >
+                                View Pet
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h2>No Adoption Requests Yet</h2>
+
+                <p>
+                    You haven't submitted any adoption requests.
+                </p>
+
+                <a
+                    href="{% url 'pet_list' %}"
+                    class="primary-button"
+                >
+                    Find a Pet
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

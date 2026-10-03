@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home - PetCare
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="container">
+
+        <div class="hero-content">
+
+            <h1>
+                Give a Pet a Loving Home
+            </h1>
+
+            <p>
+                Find your perfect companion and give
+                an abandoned pet a second chance at life.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="{% url 'pet_list' %}"
+                   class="primary-button">
+                    Find a Pet
+                </a>
+
+                {% if not user.is_authenticated %}
+
+                    <a href="{% url 'register' %}"
+                       class="secondary-button">
+                        Create Account
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- AVAILABLE PETS -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                Pets Looking for a Home
+            </h2>
+
+            <p>
+                Meet some of our adorable pets
+                waiting for a loving family.
+            </p>
+
+        </div>
+
+
+        {% if pets %}
+
+            <div class="pet-grid">
+
+                {% for pet in pets %}
+
+                    <div class="pet-card">
+
+                        {% if pet.image %}
+
+                            <img
+                                src="{{ pet.image.url }}"
+                                alt="{{ pet.name }}"
+                                class="pet-card-image"
+                            >
+
+                        {% else %}
+
+                            <div
+                                class="pet-card-image"
+                                style="
+                                    background:#eeeeee;
+                                    display:flex;
+                                    align-items:center;
+                                    justify-content:center;
+                                    font-size:60px;
+                                "
+                            >
+                                🐾
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="pet-card-content">
+
+                            <h3>
+                                {{ pet.name }}
+                            </h3>
+
+                            <p>
+                                {{ pet.animal_type }}
+                                •
+                                {{ pet.breed }}
+                            </p>
+
+                            <p>
+                                {{ pet.age }} years
+                                •
+                                {{ pet.gender }}
+                            </p>
+
+                            <p>
+                                📍 {{ pet.location }}
+                            </p>
+
+
+                            <div class="pet-card-footer">
+
+                                <span class="status-badge status-available">
+                                    Available
+                                </span>
+
+                                <a
+                                    href="{% url 'pet_detail' pet.id %}"
+                                    class="primary-button"
+                                >
+                                    View Details
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div
+                style="
+                    text-align:center;
+                    margin-top:35px;
+                "
+            >
+
+                <a
+                    href="{% url 'pet_list' %}"
+                    class="secondary-button"
+                >
+                    View All Pets
+                </a>
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>
+                    No pets available right now.
+                </h3>
+
+                <p>
+                    Please check again later.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>
+                How Adoption Works
+            </h2>
+
+            <p>
+                Adopting a pet is simple.
+            </p>
+
+        </div>
+
+
+        <div class="pet-grid">
+
+            <div class="pet-card">
+
+                <div class="pet-card-content">
+
+                    <h3>🔎 1. Find a Pet</h3>
+
+                    <p>
+                        Browse available pets and
+                        find the one that matches you.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="pet-card">
+
+                <div class="pet-card-content">
+
+                    <h3>📝 2. Apply</h3>
+
+                    <p>
+                        Submit an adoption request
+                        with your information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="pet-card">
+
+                <div class="pet-card-content">
+
+                    <h3>❤️ 3. Adopt</h3>
+
+                    <p>
+                        Once approved, welcome your
+                        new companion home.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
