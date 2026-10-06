@@ -1,2 +1,5 @@
 venv/
+staticfiles/
+media/
 .env
+pet_adoption_data.sql

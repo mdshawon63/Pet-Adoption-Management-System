@@ -130,7 +130,7 @@ img {
             rgba(20, 50, 25, 0.72),
             rgba(20, 50, 25, 0.72)
         ),
-        url("/static/images/hero.jpg");
+        url("");
 
     background-size: cover;
     background-position: center;
