@@ -1,5 +1,7 @@
 venv/
-staticfiles/
-media/
 .env
-pet_adoption_data.sql
+media/
+staticfiles/
+__pycache__/
+*.py[cod]
+*.sqlite3
