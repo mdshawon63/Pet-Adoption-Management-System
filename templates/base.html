@@ -4,32 +4,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PetCare - Pet Adoption & Rescue{% endblock %}</title>
-
-    <link rel="stylesheet"
-          href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-
 <nav class="navbar">
-
     <div class="container navbar-content">
 
         <a href="{% url 'home' %}" class="logo">
             🐾 PetCare
         </a>
 
-        <!-- Mobile Menu Button -->
-        <button class="menu-toggle"
-                id="menuToggle"
-                type="button">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation">
             ☰
         </button>
 
@@ -63,8 +52,7 @@
                     Login
                 </a>
 
-                <a href="{% url 'register' %}"
-                   class="nav-button">
+                <a href="{% url 'register' %}" class="nav-button">
                     Register
                 </a>
 
@@ -73,41 +61,24 @@
         </div>
 
     </div>
-
 </nav>
 
-
-<!-- ================= MESSAGES ================= -->
-
 {% if messages %}
-
 <div class="container messages">
 
     {% for message in messages %}
-
         <div class="message {{ message.tags }}">
             {{ message }}
         </div>
-
     {% endfor %}
 
 </div>
-
 {% endif %}
 
-
-<!-- ================= MAIN CONTENT ================= -->
-
 <main>
-
     {% block content %}
-
     {% endblock %}
-
 </main>
-
-
-<!-- ================= FOOTER ================= -->
 
 <footer class="footer">
 
@@ -115,7 +86,6 @@
 
         <div>
             <h3>🐾 PetCare</h3>
-
             <p>
                 Helping pets find loving homes.
             </p>
@@ -136,23 +106,19 @@
         <div>
             <h4>Contact</h4>
 
-            <p>Email: shawonsikdar632@.com</p>
-
+            <p>Email: shawonsikdar632@gmail.com</p>
             <p>Phone: +8801960122965</p>
         </div>
 
     </div>
 
     <div class="footer-bottom">
-
         <p>
             © 2026 PetCare — Pet Adoption & Rescue Platform
         </p>
-
     </div>
 
 </footer>
-
 
 <script src="{% static 'js/main.js' %}"></script>
 

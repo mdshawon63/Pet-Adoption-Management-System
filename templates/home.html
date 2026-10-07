@@ -6,12 +6,8 @@ Home - PetCare
 
 {% block content %}
 
-<!-- HERO -->
-
 <section class="hero">
-
     <div class="container">
-
         <div class="hero-content">
 
             <h1>
@@ -25,37 +21,26 @@ Home - PetCare
 
             <div class="hero-buttons">
 
-                <a href="{% url 'pet_list' %}"
-                   class="primary-button">
+                <a href="{% url 'pet_list' %}" class="primary-button">
                     Find a Pet
                 </a>
 
                 {% if not user.is_authenticated %}
-
-                    <a href="{% url 'register' %}"
-                       class="secondary-button">
+                    <a href="{% url 'register' %}" class="secondary-button">
                         Create Account
                     </a>
-
                 {% endif %}
 
             </div>
 
         </div>
-
     </div>
-
 </section>
 
-
-<!-- AVAILABLE PETS -->
-
 <section class="section">
-
     <div class="container">
 
         <div class="section-title">
-
             <h2>
                 Pets Looking for a Home
             </h2>
@@ -64,9 +49,7 @@ Home - PetCare
                 Meet some of our adorable pets
                 waiting for a loving family.
             </p>
-
         </div>
-
 
         {% if pets %}
 
@@ -86,21 +69,11 @@ Home - PetCare
 
                         {% else %}
 
-                            <div
-                                class="pet-card-image"
-                                style="
-                                    background:#eeeeee;
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    font-size:60px;
-                                "
-                            >
+                            <div class="pet-card-image pet-card-placeholder">
                                 🐾
                             </div>
 
                         {% endif %}
-
 
                         <div class="pet-card-content">
 
@@ -123,7 +96,6 @@ Home - PetCare
                             <p>
                                 📍 {{ pet.location }}
                             </p>
-
 
                             <div class="pet-card-footer">
 
@@ -148,13 +120,7 @@ Home - PetCare
 
             </div>
 
-
-            <div
-                style="
-                    text-align:center;
-                    margin-top:35px;
-                "
-            >
+            <div class="section-action">
 
                 <a
                     href="{% url 'pet_list' %}"
@@ -182,14 +148,9 @@ Home - PetCare
         {% endif %}
 
     </div>
-
 </section>
 
-
-<!-- HOW IT WORKS -->
-
 <section class="section">
-
     <div class="container">
 
         <div class="section-title">
@@ -204,14 +165,15 @@ Home - PetCare
 
         </div>
 
-
         <div class="pet-grid">
 
             <div class="pet-card">
 
                 <div class="pet-card-content">
 
-                    <h3>🔎 1. Find a Pet</h3>
+                    <h3>
+                        🔎 1. Find a Pet
+                    </h3>
 
                     <p>
                         Browse available pets and
@@ -222,12 +184,13 @@ Home - PetCare
 
             </div>
 
-
             <div class="pet-card">
 
                 <div class="pet-card-content">
 
-                    <h3>📝 2. Apply</h3>
+                    <h3>
+                        📝 2. Apply
+                    </h3>
 
                     <p>
                         Submit an adoption request
@@ -238,12 +201,13 @@ Home - PetCare
 
             </div>
 
-
             <div class="pet-card">
 
                 <div class="pet-card-content">
 
-                    <h3>❤️ 3. Adopt</h3>
+                    <h3>
+                        🏠 3. Adopt
+                    </h3>
 
                     <p>
                         Once approved, welcome your
@@ -257,7 +221,6 @@ Home - PetCare
         </div>
 
     </div>
-
 </section>
 
 {% endblock %}

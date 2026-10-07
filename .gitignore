@@ -1,7 +1,4 @@
 venv/
 .env
-media/
-staticfiles/
 __pycache__/
 *.py[cod]
-*.sqlite3

@@ -18,21 +18,21 @@ class UserSerializer(serializers.ModelSerializer):
             "profile_picture",
             "role",
         ]
-
         read_only_fields = [
             "id",
             "role",
         ]
-        
-        
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
-        min_length=8
+        min_length=8,
     )
     password2 = serializers.CharField(
-        write_only=True
+        write_only=True,
     )
+
     class Meta:
         model = User
         fields = [
@@ -52,7 +52,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
                 {
-                    "password": "Passwords do not match."
+                    "password": "Passwords do not match.",
                 }
             )
 
@@ -61,9 +61,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop("password2")
         password = validated_data.pop("password")
-        user = User.objects.create_user(
-            password=password,
-            **validated_data
-        )
 
-        return user
+        return User.objects.create_user(
+            password=password,
+            **validated_data,
+        )

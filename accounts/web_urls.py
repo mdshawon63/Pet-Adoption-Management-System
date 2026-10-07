@@ -9,28 +9,24 @@ from .web_views import (
 
 
 urlpatterns = [
-
     path(
         "register/",
         register_view,
-        name="register"
+        name="register",
     ),
-
     path(
         "login/",
         login_view,
-        name="login"
+        name="login",
     ),
-
     path(
         "logout/",
         logout_view,
-        name="logout"
+        name="logout",
     ),
-
     path(
         "profile/",
         profile_view,
-        name="profile"
+        name="profile",
     ),
 ]

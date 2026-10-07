@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}
@@ -8,84 +7,117 @@
 {% block content %}
 
 <section class="section">
-    <div class="container">
 
-        <a href="{% url 'pet_list' %}" class="back-link">
-            ← Back to Pets
-        </a>
+```
+<div class="container">
 
-        <div class="pet-detail">
+    <a href="{% url 'pet_list' %}" class="back-link">
+        ← Back to Pets
+    </a>
 
-            <div class="pet-detail-image">
-                {% if pet.image %}
-                    <img src="{{ pet.image.url }}" alt="{{ pet.name }}">
-                {% else %}
-                    <div class="detail-no-image">
-                        🐾
-                    </div>
-                {% endif %}
-            </div>
+    <div class="pet-detail">
 
-            <div class="pet-detail-info">
+        <div class="pet-detail-image">
 
-                <div class="pet-card-title">
-                    <h1>{{ pet.name }}</h1>
+            {% if pet.image %}
 
-                    {% if pet.status == "Available" %}
+                <img
+                    src="{{ pet.image.url }}"
+                    alt="{{ pet.name }}"
+                >
 
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'adoption_apply' pet.id %}" class="primary-button">
-                                Apply for Adoption
-                            </a>
-                        {% else %}
-                            <a href="{% url 'login' %}?next={% url 'adoption_apply' pet.id %}" class="primary-button">
-                                Login to Apply
-                            </a>
-                        {% endif %}
+            {% else %}
 
-                    {% else %}
-                        <p class="adopted-message">
-                            This pet has already been adopted.
-                        </p>
-                    {% endif %}
+                <div class="pet-detail-placeholder">
+                    🐾
                 </div>
 
-                <p class="pet-description">
-                    {{ pet.description }}
-                </p>
+            {% endif %}
 
-                <div class="pet-info-grid">
+        </div>
 
-                    <div>
-                        <strong>Animal Type</strong>
-                        <span>{{ pet.animal_type }}</span>
-                    </div>
+        <div class="pet-detail-info">
 
-                    <div>
-                        <strong>Breed</strong>
-                        <span>{{ pet.breed }}</span>
-                    </div>
+            <div class="pet-card-title">
 
-                    <div>
-                        <strong>Age</strong>
-                        <span>{{ pet.age }} years</span>
-                    </div>
+                <div>
 
-                    <div>
-                        <strong>Gender</strong>
-                        <span>{{ pet.gender }}</span>
-                    </div>
+                    <p class="section-small">
+                        PET DETAILS
+                    </p>
 
-                    <div>
-                        <strong>Location</strong>
-                        <span>{{ pet.location }}</span>
-                    </div>
+                    <h1>
+                        {{ pet.name }}
+                    </h1>
 
-                    <div>
-                        <strong>Status</strong>
-                        <span>{{ pet.status }}</span>
-                    </div>
+                </div>
 
+                {% if pet.status == "Available" %}
+
+                    {% if user.is_authenticated %}
+
+                        <a
+                            href="{% url 'adoption_apply' pet.id %}"
+                            class="primary-button"
+                        >
+                            Apply for Adoption
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'login' %}?next={% url 'adoption_apply' pet.id %}"
+                            class="primary-button"
+                        >
+                            Login to Apply
+                        </a>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <p class="adopted-message">
+                        This pet has already been adopted.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+            <p class="pet-description">
+                {{ pet.description }}
+            </p>
+
+            <div class="pet-info-grid">
+
+                <div>
+                    <strong>Animal Type</strong>
+                    <span>{{ pet.animal_type }}</span>
+                </div>
+
+                <div>
+                    <strong>Breed</strong>
+                    <span>{{ pet.breed }}</span>
+                </div>
+
+                <div>
+                    <strong>Age</strong>
+                    <span>{{ pet.age }} years</span>
+                </div>
+
+                <div>
+                    <strong>Gender</strong>
+                    <span>{{ pet.gender }}</span>
+                </div>
+
+                <div>
+                    <strong>Location</strong>
+                    <span>{{ pet.location }}</span>
+                </div>
+
+                <div>
+                    <strong>Status</strong>
+                    <span>{{ pet.status }}</span>
                 </div>
 
             </div>
@@ -93,7 +125,10 @@
         </div>
 
     </div>
+
+</div>
+```
+
 </section>
 
 {% endblock %}
-
