@@ -1,50 +1,33 @@
 import os
 from pathlib import Path
 from datetime import timedelta
-
-import dj_database_url
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-local-development-only"
-)
-
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-
-RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-this-key")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    ".railway.app",
 ]
 
-ALLOWED_HOSTS += [
-    host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
-    if host.strip()
-]
-
-if RAILWAY_PUBLIC_DOMAIN:
-    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
-
-if not DEBUG and SECRET_KEY == "django-insecure-local-development-only":
-    raise ValueError("Set a secure SECRET_KEY in environment variables")
+if os.getenv("ALLOWED_HOSTS"):
+    ALLOWED_HOSTS += [
+        host.strip()
+        for host in os.getenv("ALLOWED_HOSTS").split(",")
+        if host.strip()
+    ]
 
 CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if origin.strip()
+    "https://" + host
+    for host in ALLOWED_HOSTS
+    if host.endswith(".railway.app")
 ]
-
-if RAILWAY_PUBLIC_DOMAIN:
-    CSRF_TRUSTED_ORIGINS.append(
-        f"https://{RAILWAY_PUBLIC_DOMAIN}"
-    )
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -91,14 +74,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+if os.getenv("DATABASE_URL"):
+    import dj_database_url
 
-if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
-            DATABASE_URL,
+            os.getenv("DATABASE_URL"),
             conn_max_age=600,
-            ssl_require=not DEBUG,
+            ssl_require=False,
         )
     }
 else:
@@ -129,35 +112,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Dhaka"
-
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = "/static/"
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
+] if (BASE_DIR / "static").exists() else []
 
 MEDIA_URL = "/media/"
-
-MEDIA_ROOT = Path(
-    os.getenv("MEDIA_ROOT", str(BASE_DIR / "media"))
-)
-
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -171,32 +137,22 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_URL = "login"
-
 LOGIN_REDIRECT_URL = "home"
-
 LOGOUT_REDIRECT_URL = "home"
 
-SECURE_BROWSER_XSS_FILTER = True
-
 SECURE_CONTENT_TYPE_NOSNIFF = True
-
 X_FRAME_OPTIONS = "DENY"
-
 SESSION_COOKIE_HTTPONLY = True
-
 CSRF_COOKIE_HTTPONLY = True
 
-SECURE_PROXY_SSL_HEADER = (
-    "HTTP_X_FORWARDED_PROTO",
-    "https",
-)
-
-SESSION_COOKIE_SECURE = not DEBUG
-
-CSRF_COOKIE_SECURE = not DEBUG
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
