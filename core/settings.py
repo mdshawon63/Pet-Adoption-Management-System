@@ -2,23 +2,49 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+import dj_database_url
 from dotenv import load_dotenv
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-this-key")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-local-development-only"
+)
 
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+
+RAILWAY_PUBLIC_DOMAIN = os.getenv("RAILWAY_PUBLIC_DOMAIN", "")
 
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
 
+ALLOWED_HOSTS += [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
+
+if RAILWAY_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+
+if not DEBUG and SECRET_KEY == "django-insecure-local-development-only":
+    raise ValueError("Set a secure SECRET_KEY in environment variables")
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
+if RAILWAY_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(
+        f"https://{RAILWAY_PUBLIC_DOMAIN}"
+    )
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -27,20 +53,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
-
     "accounts",
     "pets",
     "adoptions",
 ]
 
-
 AUTH_USER_MODEL = "accounts.User"
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -49,9 +72,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 ROOT_URLCONF = "core.urls"
-
 
 TEMPLATES = [
     {
@@ -68,21 +89,29 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = "core.wsgi.application"
 
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", ""),
-        "USER": os.getenv("DB_USER", ""),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", ""),
-        "PORT": os.getenv("DB_PORT", "5432"),
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=not DEBUG,
+        )
     }
-}
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME", ""),
+            "USER": os.getenv("DB_USER", ""),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", ""),
+            "PORT": os.getenv("DB_PORT", "5432"),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -99,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Asia/Dhaka"
@@ -107,7 +135,6 @@ TIME_ZONE = "Asia/Dhaka"
 USE_I18N = True
 
 USE_TZ = True
-
 
 STATIC_URL = "/static/"
 
@@ -117,14 +144,22 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = Path(
+    os.getenv("MEDIA_ROOT", str(BASE_DIR / "media"))
+)
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -135,13 +170,11 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
 }
 
-
 LOGIN_URL = "login"
 
 LOGIN_REDIRECT_URL = "home"
 
 LOGOUT_REDIRECT_URL = "home"
-
 
 SECURE_BROWSER_XSS_FILTER = True
 
@@ -153,6 +186,14 @@ SESSION_COOKIE_HTTPONLY = True
 
 CSRF_COOKIE_HTTPONLY = True
 
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
+
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_SECURE = not DEBUG
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
